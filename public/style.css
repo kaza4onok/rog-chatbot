@@ -204,3 +204,14 @@ h1 {
   66% { content: '..'; }
   100% { content: '...'; }
 }
+
+.rog-footer {
+  margin-top: 20px;
+  padding: 12px;
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 0.9em;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 5px var(--primary-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
