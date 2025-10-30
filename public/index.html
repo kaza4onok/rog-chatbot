@@ -7,43 +7,29 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+  <div class="rog-container">
+    <header class="rog-header">
+      <h1>ROG ChatBot <span class="version">v2</span></h1>
+    </header>
 
-  <div class="rog-bg"></div>
-  <div class="rog-mask"></div>
-  <div class="hud-overlay">
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
-  </div>
+    <main class="rog-chat">
+      <div id="chat-window" class="chat-window"></div>
+      <div id="typing-indicator" class="typing-indicator" style="display: none;">
+        ROG-бот печатает<span class="dots">...</span>
+      </div>
+    </main>
 
-  <div class="theme-switcher">
-    <button onclick="applyTheme('red')">🔴</button>
-    <button onclick="applyTheme('blue')">🔵</button>
-    <button onclick="applyTheme('green')">🟢</button>
-    <button onclick="applyTheme('purple')">🟣</button>
-    <button onclick="applyTheme('gold')">🟡</button>
-  </div>
-
-  <div class="container fade-in">
-    <h1>ROG ChatBot Terminal</h1>
-    <div class="chat-window" id="chat-window"></div>
-    <div id="typing-indicator" class="typing-indicator" style="display: none;">
-      <span>ROG-бот печатает</span><span class="dots">...</span>
-    </div>
-    <div class="input-box">
-      <input type="text" id="user-input" placeholder="Напиши что-нибудь..." />
+    <div class="rog-input-area">
+      <input type="text" id="user-input" placeholder="Введите команду..." />
       <button id="send-btn">Отправить</button>
     </div>
+
+    <footer class="rog-footer">
+      Создатель: <strong>Madi</strong>
+    </footer>
   </div>
 
   <audio id="send-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.wav"></audio>
-
-  <script src="themes.js"></script>
   <script src="script.js"></script>
 </body>
-<footer class="rog-footer">
-  Создатель: <strong>Madi</strong>
-</footer>
-
 </html>
