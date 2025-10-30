@@ -7,6 +7,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
+// Отключаем кэш для статических файлов (чтобы видеть обновления сразу)
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
+app.use(express.static(path.join(__dirname, '../public'), {
+  maxAge: '0',
+  etag: false
+}));
+
+
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
