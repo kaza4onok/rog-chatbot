@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ROG ChatBot</title>
-  
-  <link rel="stylesheet" href="style.css?v=3" />
-<script src="script.js?v=3"></script>
-
+  <link rel="stylesheet" href="style.css?v=4"/>
 </head>
 <body>
   <div class="rog-container">
@@ -15,17 +12,65 @@
       <h1>ROG ChatBot <span class="version">v2</span></h1>
     </header>
 
-    <main class="rog-chat">
-      <div id="chat-window" class="chat-window"></div>
-      <div id="typing-indicator" class="typing-indicator" style="display: none;">
-        ROG-бот печатает<span class="dots">...</span>
-      </div>
-    </main>
+    <!-- Табы -->
+    <nav class="tabs">
+      <a href="#chat" class="tab-link active" data-tab="chat">💬 Чат</a>
+      <a href="#news" class="tab-link" data-tab="news">📰 Новости</a>
+      <a href="#faq" class="tab-link" data-tab="faq">❓ FAQ</a>
+      <a href="#settings" class="tab-link" data-tab="settings">⚙️ Настройки</a>
+    </nav>
 
-    <div class="rog-input-area">
-      <input type="text" id="user-input" placeholder="Введите команду..." />
-      <button id="send-btn">Отправить</button>
-    </div>
+    <!-- Вьюхи (разделы) -->
+    <main class="views">
+      <!-- Чат -->
+      <section id="view-chat" class="view active">
+        <div id="chat-window" class="chat-window"></div>
+
+        <div id="typing-indicator" class="typing-indicator" style="display: none;">
+          ROG-бот печатает<span class="dots">...</span>
+        </div>
+
+        <div class="rog-input-area">
+          <input type="text" id="user-input" placeholder="Введите команду..." />
+          <button id="send-btn">Отправить</button>
+        </div>
+      </section>
+
+      <!-- Новости (пример заглушки) -->
+      <section id="view-news" class="view">
+        <div class="panel">
+          <h2>Новости</h2>
+          <ul class="news-list">
+            <li><b>v2 UI</b>: Новый интерфейс, табы, мобильная адаптация.</li>
+            <li><b>OpenRouter</b>: GPT-ответы работают быстрее и стабильнее.</li>
+            <li><b>Дальше</b>: Команды чата, сохранение истории, голос бота.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- FAQ (пример заглушки) -->
+      <section id="view-faq" class="view">
+        <div class="panel">
+          <h2>FAQ</h2>
+          <details>
+            <summary>Как сменить тему?</summary>
+            <p>Будет доступно через команды чата (<code>!theme blue</code>) в ближайшем апдейте.</p>
+          </details>
+          <details>
+            <summary>Где хранится ключ API?</summary>
+            <p>На сервере (Render) в переменных окружения. В приложение ключ не вшит.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Настройки (пример заглушки) -->
+      <section id="view-settings" class="view">
+        <div class="panel">
+          <h2>Настройки</h2>
+          <p>Скоро здесь появятся: выбор темы, звук, голос, очистка истории.</p>
+        </div>
+      </section>
+    </main>
 
     <footer class="rog-footer">
       Создатель: <strong>Madi</strong>
@@ -33,6 +78,6 @@
   </div>
 
   <audio id="send-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.wav"></audio>
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
