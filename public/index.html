@@ -2,82 +2,128 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ROG ChatBot</title>
-  <link rel="stylesheet" href="style.css?v=4"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ROG ChatBot — AI в стиле ROG</title>
+  <meta name="description" content="ROG ChatBot — стильный AI-чат в ROG-дизайне с темами и быстрыми ответами." />
+  <link rel="canonical" href="https://rog-chatbot.onrender.com/" />
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#00ffe7" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E" />
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="ROG ChatBot — AI в стиле ROG" />
+  <meta property="og:description" content="Современный чат-бот, темы, неон, мобильная адаптация." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rog-chatbot.onrender.com/" />
+  <meta property="og:image" content="https://rog-chatbot.onrender.com/og.jpg" />
+
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
-  <div class="rog-container">
-    <header class="rog-header">
-      <h1>ROG ChatBot <span class="version">v2</span></h1>
+  <div class="app-shell">
+    <header class="site-header">
+      <div class="brand">ROG ChatBot</div>
+      <nav class="main-nav">
+        <a href="#home" class="nav-link active" data-tab="home">🏠 Главная</a>
+        <a href="#chat" class="nav-link" data-tab="chat">💬 Чат</a>
+        <a href="#news" class="nav-link" data-tab="news">📰 Новости</a>
+        <a href="#faq" class="nav-link" data-tab="faq">❓ FAQ</a>
+        <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Меню">☰</button>
     </header>
 
-    <!-- Табы -->
-    <nav class="tabs">
-      <a href="#chat" class="tab-link active" data-tab="chat">💬 Чат</a>
-      <a href="#news" class="tab-link" data-tab="news">📰 Новости</a>
-      <a href="#faq" class="tab-link" data-tab="faq">❓ FAQ</a>
-      <a href="#settings" class="tab-link" data-tab="settings">⚙️ Настройки</a>
-    </nav>
-
-    <!-- Вьюхи (разделы) -->
     <main class="views">
+      <!-- Главная (Hero) -->
+      <section id="view-home" class="view active">
+        <section class="hero">
+          <div class="hero__content">
+            <h1>AI в стиле <span>ROG</span></h1>
+            <p>Молниеносные ответы, неоновый дизайн, темы и мобильная адаптация.</p>
+            <div class="hero__cta">
+              <a href="#chat" class="btn btn-primary" data-tab="chat">Начать чат</a>
+              <a href="#news" class="btn btn-ghost" data-tab="news">Что нового?</a>
+            </div>
+          </div>
+          <div class="hero__bg"></div>
+        </section>
+
+        <section class="features panel">
+          <h2>Почему ROG ChatBot</h2>
+          <ul class="features__list">
+            <li>⚡ Быстрые ответы через OpenRouter</li>
+            <li>🎨 Современный ROG-UI и темы</li>
+            <li>📱 Установка на телефон (PWA)</li>
+            <li>🛰️ Работает даже офлайн (страница офлайн)</li>
+          </ul>
+        </section>
+      </section>
+
       <!-- Чат -->
-      <section id="view-chat" class="view active">
+      <section id="view-chat" class="view">
         <div id="chat-window" class="chat-window"></div>
-
-        <div id="typing-indicator" class="typing-indicator" style="display: none;">
-          ROG-бот печатает<span class="dots">...</span>
-        </div>
-
+        <div id="typing-indicator" class="typing-indicator" style="display:none;">ROG-бот печатает<span class="dots">...</span></div>
         <div class="rog-input-area">
           <input type="text" id="user-input" placeholder="Введите команду..." />
           <button id="send-btn">Отправить</button>
         </div>
+        <button class="scroll-fab to-bottom" id="btn-to-bottom" title="Вниз">⬇️</button>
+        <button class="scroll-fab to-top" id="btn-to-top" title="Вверх">⬆️</button>
       </section>
 
-      <!-- Новости (пример заглушки) -->
+      <!-- Новости -->
       <section id="view-news" class="view">
         <div class="panel">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v2 UI</b>: Новый интерфейс, табы, мобильная адаптация.</li>
-            <li><b>OpenRouter</b>: GPT-ответы работают быстрее и стабильнее.</li>
-            <li><b>Дальше</b>: Команды чата, сохранение истории, голос бота.</li>
+            <li><b>v3:</b> Главная (Hero), PWA, офлайн-страница, SEO-мета.</li>
+            <li>Табы, кнопки прокрутки, моб. адаптация, неон-стиль.</li>
           </ul>
         </div>
       </section>
 
-      <!-- FAQ (пример заглушки) -->
+      <!-- FAQ -->
       <section id="view-faq" class="view">
         <div class="panel">
           <h2>FAQ</h2>
           <details>
-            <summary>Как сменить тему?</summary>
-            <p>Будет доступно через команды чата (<code>!theme blue</code>) в ближайшем апдейте.</p>
+            <summary>Где хранится ключ API?</summary>
+            <p>На сервере (Render) в переменных окружения. Во фронте ключа нет.</p>
           </details>
           <details>
-            <summary>Где хранится ключ API?</summary>
-            <p>На сервере (Render) в переменных окружения. В приложение ключ не вшит.</p>
+            <summary>Можно установить как приложение?</summary>
+            <p>Да! Добавили PWA: установи «на главный экран».</p>
           </details>
         </div>
       </section>
 
-      <!-- Настройки (пример заглушки) -->
+      <!-- Настройки -->
       <section id="view-settings" class="view">
         <div class="panel">
           <h2>Настройки</h2>
-          <p>Скоро здесь появятся: выбор темы, звук, голос, очистка истории.</p>
+          <p>Скоро: темы, звук, история чата.</p>
         </div>
       </section>
     </main>
 
-    <footer class="rog-footer">
-      Создатель: <strong>Madi</strong>
+    <footer class="site-footer">
+      Создатель: <strong>Madi</strong> • <span id="build">Build v3</span>
     </footer>
   </div>
 
   <audio id="send-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.wav"></audio>
-  <script src="script.js?v=4"></script>
+
+  <script>
+    // Регистрация SW для PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>
