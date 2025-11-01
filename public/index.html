@@ -19,8 +19,9 @@
   <meta name="theme-color" content="#00ffe7"/>
   <link rel="manifest" href="manifest.webmanifest"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
+  <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
 
-  <link rel="stylesheet" href="style.css?v=7"/>
+  <link rel="stylesheet" href="style.css?v=8"/>
 </head>
 <body>
   <div class="app-shell">
@@ -33,7 +34,9 @@
         <a href="#faq"  class="nav-link" data-tab="faq">❓ FAQ</a>
         <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
       </nav>
-      <button class="burger" id="burger" aria-label="Меню">☰</button>
+      <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
+      <button id="install-btn" class="btn btn-ghost small install-btn" hidden>Установить</button>
+
     </header>
     <div class="progress-bar"><span id="progress"></span></div>
 
@@ -86,8 +89,6 @@
 
         <button class="scroll-fab to-bottom" id="btn-to-bottom" title="Вниз">⬇️</button>
         <button class="scroll-fab to-top" id="btn-to-top" title="Вверх">⬆️</button>
-        <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
-
       </section>
 
       <!-- NEWS -->
@@ -124,6 +125,7 @@
     </footer>
   </div>
 
+  <!-- Toast + PWA Install -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="install-banner" class="install-banner" hidden>
     <span>Установить ROG ChatBot на устройство?</span>
@@ -140,6 +142,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>

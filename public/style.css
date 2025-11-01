@@ -18,7 +18,7 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
   box-shadow:0 0 30px rgba(0,255,231,.25), inset 0 0 18px rgba(160,0,255,.05);overflow:hidden}
 
 /* Header + progress */
-.site-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#000;border-bottom:1px solid rgba(0,255,231,.35)}
+.site-header{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#000;border-bottom:1px solid rgba(0,255,231,.35)}
 .brand{font-family:'Orbitron',sans-serif;color:var(--primary);letter-spacing:1px}
 .main-nav{display:flex;gap:8px;align-items:center}
 .nav-link{color:#bff;text-decoration:none;border:1px solid rgba(0,255,231,.35);padding:8px 12px;border-radius:10px;transition:.2s}
@@ -27,6 +27,20 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 .burger{display:none;background:none;border:1px solid rgba(0,255,231,.35);color:#bff;padding:6px 10px;border-radius:8px}
 .progress-bar{height:3px;background:rgba(255,255,255,.06)}
 .progress-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent))}
+
+/* раскрытие мобильного меню */
+@media (max-width:780px){
+  .main-nav{
+    display:none;
+    position:absolute; top:100%; right:12px;
+    background:#0d1220; border:1px solid rgba(0,255,231,.35);
+    border-radius:12px; padding:10px; flex-direction:column; gap:8px;
+    z-index:1000; box-shadow:0 10px 24px rgba(0,0,0,.35), 0 0 14px rgba(0,255,231,.25)
+  }
+  .main-nav.open{ display:flex; }
+  .main-nav .nav-link{ display:block; width:100%; }
+  .burger{ display:block; }
+}
 
 /* Views */
 .views{flex:1;display:flex;flex-direction:column;min-height:0}
@@ -99,25 +113,12 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 /* Footer */
 .site-footer{padding:10px;text-align:center;font-size:.9em;color:var(--muted);background:#0d0f15;border-top:1px solid rgba(255,255,255,.05)}
 
-/* Toast + install banner */
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#0d1220;border:1px solid rgba(0,255,231,.35);
-  color:#bff;padding:10px 14px;border-radius:10px;box-shadow:0 0 14px rgba(0,255,231,.25);opacity:0;pointer-events:none;transition:.2s;z-index:9999}
-.toast.show{opacity:1;pointer-events:auto}
-.install-banner{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;gap:12px;align-items:center;
-  background:#0d1220;border:1px solid rgba(0,255,231,.35);padding:12px 14px;border-radius:12px;box-shadow:0 0 14px rgba(0,255,231,.25);z-index:9998}
-
 /* Animations */
 .reveal{opacity:0;transform:translateY(18px);transition:.5s}
 .reveal.show{opacity:1;transform:none}
 
 /* Responsive */
-@media (max-width:900px){
-  .features__list{grid-template-columns:repeat(2,1fr)}
-}
-@media (max-width:780px){
-  .main-nav{display:none}
-  .burger{display:block}
-}
+@media (max-width:900px){ .features__list{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:560px){
   .features__list{grid-template-columns:1fr}
   .hero__content h1{font-size:2.1rem}
@@ -125,30 +126,8 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
   .scroll-fab.to-bottom{bottom:96px}.scroll-fab.to-top{bottom:144px}
 }
 
-/* чтобы бургер раскрывал мобильное меню */
-.site-header { position: relative; }
-
-@media (max-width: 780px) {
-  .main-nav {
-    display: none;                /* скрыто по умолчанию */
-    position: absolute;
-    top: 100%;
-    right: 12px;
-    background: #0d1220;
-    border: 1px solid rgba(0,255,231,.35);
-    border-radius: 12px;
-    padding: 10px;
-    flex-direction: column;
-    gap: 8px;
-    z-index: 1000;
-    box-shadow: 0 10px 24px rgba(0,0,0,.35), 0 0 14px rgba(0,255,231,.25);
-  }
-  .main-nav.open {                /* вот это — ключ! */
-    display: flex;
-  }
-  .main-nav .nav-link {           /* ссылки в столбик и на всю ширину */
-    display: block;
-    width: 100%;
-  }
-  .burger { display: block; }     /* сам бургер виден */
+/* Install button in header */
+.install-btn { margin-left: 8px; }
+@media (max-width:780px){
+  .install-btn { position: absolute; right: 60px; top: 12px; z-index: 1001; }
 }

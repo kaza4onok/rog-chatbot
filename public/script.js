@@ -217,25 +217,88 @@ function sendMessage(){
   });
 }
 
-// ===== PWA Install Banner =====
+// ===== PWA Install (banner + header button) =====
 let deferredPrompt = null;
 const ib = document.getElementById('install-banner');
 const ibInstall = document.getElementById('ib-install');
 const ibClose = document.getElementById('ib-close');
+const installBtn = document.getElementById('install-btn');
 
-window.addEventListener('beforeinstallprompt', (e)=>{
+function isiOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+// Событие от браузера — страница installable
+window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  if(ib) ib.hidden = false;
+  ib && (ib.hidden = false);           // наш баннер
+  installBtn && (installBtn.hidden = false); // и кнопка в шапке
 });
-ibInstall?.addEventListener('click', async ()=>{
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  ib.hidden = true; deferredPrompt = null;
-  toast(outcome === 'accepted' ? 'Установка начата' : 'Отложено');
+
+// Клик по кнопке "Установить" в шапке
+installBtn?.addEventListener('click', async () => {
+  if (!deferredPrompt) { ib && (ib.hidden = true); installBtn.hidden = true; return; }
+  try {
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    toast(outcome === 'accepted' ? 'Установка начата' : 'Отложено');
+  } catch (_) {} finally {
+    deferredPrompt = null;
+    ib && (ib.hidden = true);
+    installBtn.hidden = true;
+  }
 });
-ibClose?.addEventListener('click', ()=>{ ib.hidden = true; });
+
+// Кнопки баннера
+ibInstall?.addEventListener('click', async () => {
+  if (!deferredPrompt) { ib.hidden = true; return; }
+  try {
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    toast(outcome === 'accepted' ? 'Установка начата' : 'Отложено');
+  } catch (_) {} finally {
+    deferredPrompt = null;
+    ib.hidden = true;
+    installBtn && (installBtn.hidden = true);
+  }
+});
+ibClose?.addEventListener('click', () => {
+  deferredPrompt = null;
+  ib.hidden = true;
+});
+
+// Когда уже установлен — прячем всё
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  ib && (ib.hidden = true);
+  installBtn && (installBtn.hidden = true);
+  toast('Установлено ✅');
+});
+
+// На загрузке: если iOS — показываем инструкцию, если уже установлено — ничего
+window.addEventListener('load', () => {
+  if (isStandalone()) {
+    ib && (ib.hidden = true);
+    installBtn && (installBtn.hidden = true);
+    return;
+  }
+  if (isiOS() && ib) {
+    // На iOS системного beforeinstallprompt нет — даём подсказку
+    const text = ib.querySelector('span');
+    if (text) text.textContent = 'На iPhone: Поделиться → На экран «Домой»';
+    ib.hidden = false;
+  }
+});
+
+
+// Не показывать баннер, если уже установлено
+window.addEventListener('load', () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                    || window.navigator.standalone === true;
+  if (isStandalone && ib) ib.hidden = true;
+});
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', ()=>{
