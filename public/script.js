@@ -203,11 +203,11 @@ let mapGL=null, userMark=null, pointMark=null;
 function init2GISMapOnce(){
   if (mapGL || !window.mapgl) return;
 
-  mapGL = new mapgl.Map('map', {
-    center: [76.889709, 43.238949], // [lng, lat] Алматы
-    zoom: 12,
-    key: 'demo' // для теста; для продакшена замените на свой MapGL ключ
-  });
+mapGL = new mapgl.Map('map', {
+  center: [76.889709, 43.238949], // [lng, lat]
+  zoom: 12,
+  key: 'a868ff9d-ac9b-4474-8bdc-b036cac25b44' // вместо 'demo'
+});
 
   mapGL.on('click', (e) => {
     const { lng, lat } = e.lngLat;
