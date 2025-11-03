@@ -3,7 +3,7 @@ function switchTab(tab){
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active', l.dataset.tab===tab));
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id===`view-${tab}`));
   if(tab==='chat'){ bindQuickPrompts(); bindChatHandlers(); document.getElementById('user-input')?.focus(); }
-  if(tab==='map'){ init2GISMapOnce(); setTimeout(()=>{ try{ mapDG && mapDG.invalidateSize(); }catch(_){} }, 150); }
+  if(tab==='map'){ init2GISMapOnce(); }
 }
 function initTabs(){
   document.querySelectorAll('[data-tab]').forEach(el=>{
@@ -158,7 +158,7 @@ function sendMessage(){
   .catch(_=>{ typingEl.style.display="none"; chatWindow.setAttribute('aria-busy','false'); addMessageEl("ROG-бот","⚠️ Ошибка получения ответа."); });
 }
 
-/* ===== PWA Install (banner + header button + iOS hint) ===== */
+/* ===== PWA Install ===== */
 let deferredPrompt=null;
 const ib=document.getElementById('install-banner'), ibInstall=document.getElementById('ib-install'), ibClose=document.getElementById('ib-close'), installBtn=document.getElementById('install-btn');
 const isiOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -197,42 +197,53 @@ document.getElementById('weather-search')?.addEventListener('click', ()=>{ const
 cityInput?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const q=(cityInput.value||'').trim(); if(q) showWeatherByCity(q); }});
 document.getElementById('weather-geo')?.addEventListener('click', showWeatherByGeo);
 
-/* ===== Map (2GIS) ===== */
-let mapDG=null, userMarker=null, pointMarker=null;
+/* ===== Map (2GIS — MapGL, demo key) ===== */
+let mapGL=null, userMark=null, pointMark=null;
+
 function init2GISMapOnce(){
-  if(mapDG || !window.DG) return;
-  DG.then(function(){
-    mapDG = DG.map('map', { center:[43.238949,76.889709], zoom:12, fullscreenControl:false });
-    mapDG.on('click', function(e){
-      const lat=e.latlng.lat.toFixed(6), lng=e.latlng.lng.toFixed(6);
-      if(pointMarker) mapDG.removeLayer(pointMarker);
-      pointMarker = DG.marker([lat,lng]).addTo(mapDG).bindPopup(`Выбрано: ${lat}, ${lng}`).openPopup();
-      updateCoords(`${lat}, ${lng}`);
-    });
-    document.getElementById('map-geo')?.addEventListener('click', locateMe);
-    document.getElementById('map-clear')?.addEventListener('click', ()=>{
-      if(pointMarker){ mapDG.removeLayer(pointMarker); pointMarker=null; }
-      updateCoords('');
-    });
+  if (mapGL || !window.mapgl) return;
+
+  mapGL = new mapgl.Map('map', {
+    center: [76.889709, 43.238949], // [lng, lat] Алматы
+    zoom: 12,
+    key: 'demo' // для теста; для продакшена замените на свой MapGL ключ
+  });
+
+  mapGL.on('click', (e) => {
+    const { lng, lat } = e.lngLat;
+    if (pointMark) pointMark.destroy();
+    pointMark = new mapgl.Marker(mapGL, { coordinates: [lng, lat] });
+    updateCoords(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+  });
+
+  document.getElementById('map-geo')?.addEventListener('click', locateMe);
+  document.getElementById('map-clear')?.addEventListener('click', () => {
+    if (pointMark) { pointMark.destroy(); pointMark = null; }
+    updateCoords('');
   });
 }
+
 function updateCoords(text){
-  const el=document.getElementById('map-coords'); if(!el) return;
-  el.textContent = text?`Координаты: ${text}`:'';
-  if(!text){ el.style.cursor='default'; el.onclick=null; return; }
-  el.style.cursor='pointer';
-  el.onclick = async ()=>{ try{ await navigator.clipboard.writeText(text); toast('Скопировано'); }catch(_){ } };
+  const el = document.getElementById('map-coords');
+  if (!el) return;
+  el.textContent = text ? `Координаты: ${text}` : '';
+  if (!text){ el.style.cursor = 'default'; el.onclick = null; return; }
+  el.style.cursor = 'pointer';
+  el.onclick = async () => { try { await navigator.clipboard.writeText(text); toast('Скопировано'); } catch(_) {} };
 }
+
 function locateMe(){
-  if(!navigator.geolocation){ toast('Геолокация не поддерживается'); return; }
+  if (!navigator.geolocation){ toast('Геолокация не поддерживается'); return; }
   toast('Определяю местоположение…');
   navigator.geolocation.getCurrentPosition(pos=>{
-    const lat=pos.coords.latitude, lng=pos.coords.longitude;
-    mapDG.setView([lat,lng], 14);
-    if(userMarker) mapDG.removeLayer(userMarker);
-    userMarker = DG.marker([lat,lng]).addTo(mapDG).bindPopup('Вы здесь').openPopup();
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    mapGL.setCenter([lng, lat]);
+    mapGL.setZoom(14);
+    if (userMark) userMark.destroy();
+    userMark = new mapgl.Marker(mapGL, { coordinates: [lng, lat] });
     updateCoords(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-  }, ()=>toast('Разрешите доступ к геолокации'));
+  }, ()=> toast('Разрешите доступ к геолокации'));
 }
 
 /* ===== Init ===== */
@@ -246,5 +257,5 @@ document.addEventListener('DOMContentLoaded', ()=>{
   initReveal();
   updateScrollButtons();
 
-  if(location.hash==='#map'){ init2GISMapOnce(); setTimeout(()=>{ try{ mapDG && mapDG.invalidateSize(); }catch(_){} },150); }
+  if(location.hash==='#map'){ init2GISMapOnce(); }
 });

@@ -20,8 +20,8 @@
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
 
-  <!-- 2GIS JS SDK (замени ключ!) -->
-  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&key=a868ff9d-ac9b-4474-8bdc-b036cac25b44"></script>
+  <!-- 2GIS MapGL SDK (demo key используется в script.js) -->
+  <script src="https://mapgl.2gis.com/api/js/v2"></script>
 
   <link rel="stylesheet" href="style.css?v=14"/>
 </head>
@@ -129,8 +129,8 @@
         <div class="panel reveal">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v14:</b> Добавлена вкладка «Карта» (2GIS) + фикс чипов и чата.</li>
-            <li><b>v12–13:</b> Улучшения подсказок/карты, PWA, погода.</li>
+            <li><b>v15:</b> Карта переведена на 2GIS MapGL (demo key), больше нет ошибки RasterJS.</li>
+            <li>Ранее: Погода (Open-Meteo), подсказки, PWA, поток ответа, бургер-меню.</li>
           </ul>
         </div>
       </section>
@@ -140,7 +140,7 @@
         <div class="panel reveal">
           <h2>FAQ</h2>
           <details><summary>Где хранится ключ GPT?</summary><p>На сервере Render в переменных окружения.</p></details>
-          <details><summary>Почему ключ 2GIS в HTML?</summary><p>Так подключается 2GIS JS SDK. Используйте демо/ограниченный ключ.</p></details>
+          <details><summary>Почему ключ 2GIS не в .env?</summary><p>MapGL JS требует ключ во фронте. Для теста используется demo.</p></details>
         </div>
       </section>
 
@@ -154,7 +154,7 @@
     </main>
 
     <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v14</span>
+      Создатель: <strong>Madi</strong> • <span id="build">Build v15</span>
     </footer>
   </div>
 
@@ -175,6 +175,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=14"></script>
+  <script src="script.js?v=15"></script>
 </body>
 </html>
