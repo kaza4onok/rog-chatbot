@@ -3,7 +3,7 @@
 :root{
   --primary:#00ffe7; --accent:#a000ff;
   --bg0:#08090d; --bg1:#0f111a; --panel:#121524; --glass:rgba(255,255,255,.06);
-  --user:#ff0055; --bot:#00ffe7; --text:#dff; --muted:#9ab;
+  --user:#ff0055; --bot:#00ffe7; --text:#dff; --muted:#9ab; --ok:#5dfbb3; --warn:#ffd86b;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
@@ -25,10 +25,11 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 .nav-link:hover{background:rgba(0,255,231,.07)}
 .nav-link.active{background:rgba(0,255,231,.12);box-shadow:0 0 12px rgba(0,255,231,.35);color:#fff}
 .burger{display:none;background:none;border:1px solid rgba(0,255,231,.35);color:#bff;padding:6px 10px;border-radius:8px}
+.install-btn{margin-left:8px}
 .progress-bar{height:3px;background:rgba(255,255,255,.06)}
 .progress-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent))}
 
-/* раскрытие мобильного меню */
+/* мобильное меню */
 @media (max-width:780px){
   .main-nav{
     display:none;
@@ -40,6 +41,7 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
   .main-nav.open{ display:flex; }
   .main-nav .nav-link{ display:block; width:100%; }
   .burger{ display:block; }
+  .install-btn{ position:absolute; right:60px; top:12px; z-index:1001; }
 }
 
 /* Views */
@@ -58,7 +60,8 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 .btn{border-radius:12px;padding:10px 16px;text-decoration:none;cursor:pointer;border:1px solid rgba(0,255,231,.3)}
 .btn.small{padding:7px 10px;border-radius:9px}
 .btn-primary{background:var(--primary);color:#000;font-weight:800}
-.btn-ghost{background:transparent;color:#bff}
+.btn-ghost{background:transparent;color:#bff;border:1px solid rgba(0,255,231,.35)}
+.btn-ghost[disabled]{opacity:.5;cursor:not-allowed}
 .hero__bg::before{content:"";position:absolute;inset:-10%;background:
   radial-gradient(600px 600px at 20% 20%, rgba(0,255,231,.18), transparent 40%),
   radial-gradient(700px 700px at 80% 80%, rgba(160,0,255,.18), transparent 40%);filter:blur(30px)}
@@ -86,20 +89,28 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 .message{padding:10px 14px;border-radius:12px;max-width:80%;line-height:1.45;word-wrap:break-word;box-shadow:0 0 10px rgba(0,255,231,.18)}
 .message.user{align-self:flex-end;background:var(--user);color:#fff}
 .message.bot{align-self:flex-start;background:var(--bot);color:#000}
-.msg-actions{display:flex;gap:8px;margin-top:6px}
-.msg-actions .btn-ghost{border-color:rgba(0,0,0,.15)}
 
-.typing-indicator{padding:8px 2px 10px;font-size:.9em;color:var(--primary);text-shadow:0 0 5px var(--primary)}
+/* WEATHER */
+.weather-wrap h2{margin-bottom:10px}
+.weather-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.weather-toolbar input{flex:1;min-width:220px;padding:10px;background:#1c2030;color:#fff;border:1px solid rgba(0,255,231,.35);border-radius:10px}
+.weather-status{min-height:22px;color:var(--muted);margin-bottom:8px}
+.weather-current{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;margin-bottom:12px}
+.weather-current .wc-temp{font-size:2rem;font-weight:800}
+.weather-current .wc-city{font-weight:600}
+.weather-current .wc-extra{color:#bff}
+.weather-forecast{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.w-day{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;text-align:center}
+.w-day .d{color:#bff;font-weight:600;margin-bottom:6px}
+.w-day .ico{font-size:1.4rem;margin-bottom:4px}
+.w-day .t{font-weight:700}
+
+/* Footer / animations */
+.site-footer{padding:10px;text-align:center;font-size:.9em;color:var(--muted);background:#0d0f15;border-top:1px solid rgba(255,255,255,.05)}
+.reveal{opacity:0;transform:translateY(18px);transition:.5s}
+.reveal.show{opacity:1;transform:none}
 .typing-indicator .dots::after{content:'...';animation:dots 1.2s infinite steps(3)}
 @keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
-
-.rog-input-area{display:flex;gap:10px;align-items:center;padding:12px;background:var(--glass);border:1px solid rgba(255,255,255,.08);
-  border-radius:12px;margin-top:10px;backdrop-filter:blur(8px)}
-.rog-input-area input{flex:1;padding:10px;background:#1c2030;color:#fff;border:1px solid rgba(0,255,231,.35);border-radius:10px;outline:none}
-.input-actions{display:flex;gap:8px}
-.rog-input-area button{padding:10px 16px;background:var(--primary);color:#000;border:none;border-radius:10px;cursor:pointer;font-weight:800}
-.btn-ghost{background:transparent;color:#bff;border:1px solid rgba(0,255,231,.35)}
-.btn-ghost[disabled]{opacity:.5;cursor:not-allowed}
 
 /* FAB scroll */
 .scroll-fab{position:absolute;right:12px;width:44px;height:44px;border-radius:50%;background:var(--primary);color:#000;border:none;
@@ -110,24 +121,13 @@ body{background:radial-gradient(1200px 800px at 10% 10%, rgba(0,255,231,.10), tr
 .scroll-fab.show{opacity:1;pointer-events:auto}
 .scroll-fab:active{transform:scale(.95)}
 
-/* Footer */
-.site-footer{padding:10px;text-align:center;font-size:.9em;color:var(--muted);background:#0d0f15;border-top:1px solid rgba(255,255,255,.05)}
-
-/* Animations */
-.reveal{opacity:0;transform:translateY(18px);transition:.5s}
-.reveal.show{opacity:1;transform:none}
-
 /* Responsive */
 @media (max-width:900px){ .features__list{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:780px){ .weather-forecast{grid-template-columns:repeat(4,1fr)} }
 @media (max-width:560px){
   .features__list{grid-template-columns:1fr}
   .hero__content h1{font-size:2.1rem}
   .scroll-fab{right:10px;width:40px;height:40px}
   .scroll-fab.to-bottom{bottom:96px}.scroll-fab.to-top{bottom:144px}
-}
-
-/* Install button in header */
-.install-btn { margin-left: 8px; }
-@media (max-width:780px){
-  .install-btn { position: absolute; right: 60px; top: 12px; z-index: 1001; }
+  .weather-forecast{grid-template-columns:repeat(2,1fr)}
 }

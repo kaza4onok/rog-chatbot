@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
   <title>ROG ChatBot — AI в стиле ROG</title>
-  <meta name="description" content="Современный AI-чат в ROG-дизайне: быстрые ответы, темы, мобильная адаптация, PWA."/>
+  <meta name="description" content="Современный AI-чат в ROG-дизайне + погода, подсказки, эффекты, PWA."/>
   <link rel="canonical" href="https://rog-chatbot.onrender.com/"/>
 
   <!-- SEO / OpenGraph -->
   <meta property="og:title" content="ROG ChatBot — AI в стиле ROG"/>
-  <meta property="og:description" content="Hero + чат с подсказками, эффекты, PWA, офлайн-страница."/>
+  <meta property="og:description" content="Чат, прогноз погоды, PWA, офлайн-страница."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://rog-chatbot.onrender.com/"/>
   <meta property="og:image" content="https://rog-chatbot.onrender.com/og.jpg"/>
@@ -18,10 +18,10 @@
   <!-- PWA -->
   <meta name="theme-color" content="#00ffe7"/>
   <link rel="manifest" href="manifest.webmanifest"/>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
 
-  <link rel="stylesheet" href="style.css?v=8"/>
+  <link rel="stylesheet" href="style.css?v=9"/>
 </head>
 <body>
   <div class="app-shell">
@@ -30,13 +30,13 @@
       <nav class="main-nav">
         <a href="#home" class="nav-link active" data-tab="home">🏠 Главная</a>
         <a href="#chat" class="nav-link" data-tab="chat">💬 Чат</a>
+        <a href="#weather" class="nav-link" data-tab="weather">⛅ Погода</a>
         <a href="#news" class="nav-link" data-tab="news">📰 Новости</a>
         <a href="#faq"  class="nav-link" data-tab="faq">❓ FAQ</a>
         <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
       </nav>
       <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
       <button id="install-btn" class="btn btn-ghost small install-btn" hidden>Установить</button>
-
     </header>
     <div class="progress-bar"><span id="progress"></span></div>
 
@@ -61,8 +61,8 @@
           <div class="features__list">
             <div class="feature-card tilt"><h3>⚡ Быстро</h3><p>Ответы через OpenRouter с локальным “стримом”.</p></div>
             <div class="feature-card tilt"><h3>🎨 Стиль</h3><p>Glass + неон + микро-анимации, параллакс.</p></div>
+            <div class="feature-card tilt"><h3>⛅ Погода</h3><p>Прогноз на 7 дней без ключей (Open-Meteo).</p></div>
             <div class="feature-card tilt"><h3>📱 PWA</h3><p>Установка на телефон, офлайн-страница.</p></div>
-            <div class="feature-card tilt"><h3>🛡️ Безопасно</h3><p>Ключи только на сервере, без утечек во фронт.</p></div>
           </div>
         </section>
       </section>
@@ -91,13 +91,32 @@
         <button class="scroll-fab to-top" id="btn-to-top" title="Вверх">⬆️</button>
       </section>
 
+      <!-- WEATHER -->
+      <section id="view-weather" class="view">
+        <div class="panel weather-wrap">
+          <h2>Прогноз погоды</h2>
+          <div class="weather-toolbar">
+            <input id="weather-city" type="text" placeholder="Город (например, Алматы)" />
+            <button id="weather-search" class="btn btn-primary small">Найти</button>
+            <button id="weather-geo" class="btn btn-ghost small">Моё местоположение</button>
+          </div>
+
+          <div id="weather-status" class="weather-status"></div>
+
+          <div id="weather-current" class="weather-current"></div>
+          <div id="weather-forecast" class="weather-forecast"></div>
+
+          <div class="weather-source">Источник данных: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></div>
+        </div>
+      </section>
+
       <!-- NEWS -->
       <section id="view-news" class="view">
         <div class="panel reveal">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v4:</b> Полный редизайн (Hero, эффекты, подсказки, прогресс-бар), “стрим” ответа, PWA/SEO улучшено.</li>
-            <li>Табы, кнопки прокрутки, мобильная адаптация, неон-стиль — всё на месте.</li>
+            <li><b>v4/9:</b> Раздел «Погода» (поиск/гео, текущая + 7 дней), без API-ключей.</li>
+            <li>Полный редизайн, подсказки, поток ответа, PWA/SEO, бургер-меню.</li>
           </ul>
         </div>
       </section>
@@ -106,8 +125,8 @@
       <section id="view-faq" class="view">
         <div class="panel reveal">
           <h2>FAQ</h2>
-          <details><summary>Где хранится ключ API?</summary><p>На сервере (Render) в переменных окружения.</p></details>
-          <details><summary>Можно установить на телефон?</summary><p>Да, это PWA. Нажми «Установить» при предложении браузера.</p></details>
+          <details><summary>Нужен ли ключ для погоды?</summary><p>Нет, используется Open-Meteo (без ключей), с CORS.</p></details>
+          <details><summary>Где хранится ключ GPT?</summary><p>На сервере Render в переменных окружения.</p></details>
         </div>
       </section>
 
@@ -121,7 +140,7 @@
     </main>
 
     <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v4</span>
+      Создатель: <strong>Madi</strong> • <span id="build">Build v9</span>
     </footer>
   </div>
 
@@ -142,6 +161,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
