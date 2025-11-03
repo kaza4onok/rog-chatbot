@@ -3,6 +3,7 @@ function switchTab(tab){
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active', l.dataset.tab===tab));
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id===`view-${tab}`));
   if(tab==='chat'){
+    bindQuickPrompts();
     bindChatHandlers();
     document.getElementById('user-input')?.focus();
   }
@@ -86,6 +87,39 @@ const btnDown    = document.getElementById('btn-to-bottom');
 const btnUp      = document.getElementById('btn-to-top');
 const toastEl    = document.getElementById('toast');
 
+/* ----- Quick prompts (делегирование) ----- */
+function bindQuickPrompts(){
+  const container = document.querySelector('.quick-prompts');
+  if (!container || container.__bound) return;
+
+  // Сделаем чипы фокусируемыми
+  container.querySelectorAll('.chip').forEach(ch => ch.setAttribute('tabindex','0'));
+
+  function applyPromptFrom(target){
+    const chip = target.closest('.chip');
+    if(!chip) return;
+    const val = chip.dataset.prompt || chip.textContent.trim();
+    const input = document.getElementById('user-input');
+    if (input){
+      input.value = val;
+      input.focus();
+      const len = val.length;
+      input.setSelectionRange(len, len);
+    }
+  }
+
+  container.addEventListener('click', (e)=> applyPromptFrom(e.target));
+  container.addEventListener('keydown', (e)=>{
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('chip')){
+      e.preventDefault();
+      applyPromptFrom(e.target);
+    }
+  });
+
+  container.__bound = true;
+}
+
+/* ----- Chat handlers ----- */
 function bindChatHandlers(){
   const sendBtn  = document.getElementById('send-btn');
   const stopBtn  = document.getElementById('stop-btn');
@@ -330,7 +364,6 @@ async function showWeatherByGeo(){
       const { latitude:lat, longitude:lon } = pos.coords;
       setWeatherStatus('Загружаю прогноз…');
       const data = await fetchWeather(lat, lon);
-      // обратное гео
       let label = 'Ваше местоположение';
       try{
         const r = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=ru&format=json`);
@@ -353,6 +386,7 @@ document.getElementById('weather-geo')?.addEventListener('click', showWeatherByG
 /* ===== Init ===== */
 document.addEventListener('DOMContentLoaded', ()=>{
   initTabs();
+  bindQuickPrompts();
   bindChatHandlers();
   onScrollProgress();
   initParallax();
