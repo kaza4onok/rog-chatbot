@@ -1,7 +1,7 @@
-const CACHE = 'rog-v7';
+const CACHE = 'rog-v9';
 const OFFLINE_URL = '/offline.html';
 const ASSETS = [
-  '/', '/index.html', '/style.css?v=11', '/script.js?v=11',
+  '/', '/index.html', '/style.css?v=14', '/script.js?v=14',
   '/manifest.webmanifest', OFFLINE_URL
 ];
 
@@ -16,20 +16,14 @@ self.addEventListener('activate', e=>{
   self.clients.claim();
 });
 self.addEventListener('fetch', e=>{
-  const req = e.request;
-  const url = new URL(req.url);
-  if (req.method !== 'GET' || url.pathname.startsWith('/chat')) return;
+  const req=e.request; const url=new URL(req.url);
+  if(req.method!=='GET' || url.pathname.startsWith('/chat')) return;
 
-  if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(()=>caches.match(OFFLINE_URL)));
-    return;
-  }
+  if(req.mode==='navigate'){ e.respondWith(fetch(req).catch(()=>caches.match(OFFLINE_URL))); return; }
 
   e.respondWith(
     caches.match(req).then(cached => cached || fetch(req).then(resp=>{
-      const copy = resp.clone();
-      caches.open(CACHE).then(c=>c.put(req, copy));
-      return resp;
+      const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(req, copy)); return resp;
     }).catch(()=>cached))
   );
 });

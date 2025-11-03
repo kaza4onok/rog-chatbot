@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
   <title>ROG ChatBot — AI в стиле ROG</title>
-  <meta name="description" content="Современный AI-чат в ROG-дизайне + погода, подсказки, эффекты, PWA."/>
+  <meta name="description" content="Современный AI-чат в ROG-дизайне: чат + погода + карта 2GIS, PWA, эффекты."/>
   <link rel="canonical" href="https://rog-chatbot.onrender.com/"/>
 
   <!-- SEO / OpenGraph -->
   <meta property="og:title" content="ROG ChatBot — AI в стиле ROG"/>
-  <meta property="og:description" content="Чат, прогноз погоды, PWA, офлайн-страница."/>
+  <meta property="og:description" content="Чат, прогноз погоды, карта 2GIS, офлайн-страница, PWA."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://rog-chatbot.onrender.com/"/>
-  <meta property="og:image" content="https://rog-chatbot.onrender.com/og.jpg"/>
 
   <!-- PWA -->
   <meta name="theme-color" content="#00ffe7"/>
@@ -21,7 +20,10 @@
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
 
-  <link rel="stylesheet" href="style.css?v=11"/>
+  <!-- 2GIS JS SDK (замени ключ!) -->
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&key=a868ff9d-ac9b-4474-8bdc-b036cac25b44"></script>
+
+  <link rel="stylesheet" href="style.css?v=14"/>
 </head>
 <body>
   <div class="app-shell">
@@ -31,8 +33,9 @@
         <a href="#home" class="nav-link active" data-tab="home">🏠 Главная</a>
         <a href="#chat" class="nav-link" data-tab="chat">💬 Чат</a>
         <a href="#weather" class="nav-link" data-tab="weather">⛅ Погода</a>
+        <a href="#map" class="nav-link" data-tab="map">🗺️ Карта</a>
         <a href="#news" class="nav-link" data-tab="news">📰 Новости</a>
-        <a href="#faq"  class="nav-link" data-tab="faq">❓ FAQ</a>
+        <a href="#faq" class="nav-link" data-tab="faq">❓ FAQ</a>
         <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
       </nav>
       <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
@@ -41,7 +44,7 @@
     <div class="progress-bar"><span id="progress"></span></div>
 
     <main class="views">
-      <!-- HERO -->
+      <!-- HOME -->
       <section id="view-home" class="view active">
         <section class="hero">
           <div class="hero__bg parallax" data-depth="0.2"></div>
@@ -59,10 +62,10 @@
         <section class="features panel reveal">
           <h2>Почему это цепляет</h2>
           <div class="features__list">
-            <div class="feature-card tilt"><h3>⚡ Быстро</h3><p>Ответы через OpenRouter с локальным “стримом”.</p></div>
+            <div class="feature-card tilt"><h3>⚡ Быстро</h3><p>Ответы через OpenRouter с локальным «стримом».</p></div>
             <div class="feature-card tilt"><h3>🎨 Стиль</h3><p>Glass + неон + микро-анимации, параллакс.</p></div>
-            <div class="feature-card tilt"><h3>⛅ Погода</h3><p>Прогноз на 7 дней без ключей (Open-Meteo).</p></div>
-            <div class="feature-card tilt"><h3>📱 PWA</h3><p>Установка на телефон, офлайн-страница.</p></div>
+            <div class="feature-card tilt"><h3>⛅ Погода</h3><p>7 дней без ключей (Open-Meteo).</p></div>
+            <div class="feature-card tilt"><h3>🗺️ Карта</h3><p>2GIS: геолокация, маркеры, копирование координат.</p></div>
           </div>
         </section>
       </section>
@@ -100,13 +103,24 @@
             <button id="weather-search" class="btn btn-primary small" type="button">Найти</button>
             <button id="weather-geo" class="btn btn-ghost small" type="button">Моё местоположение</button>
           </div>
-
           <div id="weather-status" class="weather-status"></div>
-
           <div id="weather-current" class="weather-current"></div>
           <div id="weather-forecast" class="weather-forecast"></div>
+          <div class="weather-source">Источник: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></div>
+        </div>
+      </section>
 
-          <div class="weather-source">Источник данных: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></div>
+      <!-- MAP -->
+      <section id="view-map" class="view">
+        <div class="panel map-wrap">
+          <h2>Карта 2GIS</h2>
+          <div class="map-toolbar">
+            <button id="map-geo" class="btn btn-primary small" type="button">Моё местоположение</button>
+            <button id="map-clear" class="btn btn-ghost small" type="button">Сбросить маркер</button>
+            <span id="map-coords" class="map-coords"></span>
+          </div>
+          <div id="map" class="dgis-map" role="region" aria-label="Интерактивная карта 2ГИС"></div>
+          <p class="map-hint">Клик по карте — поставить маркер. Клик по координатам — копировать в буфер.</p>
         </div>
       </section>
 
@@ -115,9 +129,8 @@
         <div class="panel reveal">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v11:</b> Фикс кнопки «Отправить» (type=button + надёжные обработчики).</li>
-            <li><b>v9:</b> Раздел «Погода» (поиск/гео, 7 дней) без ключей.</li>
-            <li>Полный редизайн, подсказки, поток ответа, PWA/SEO, бургер-меню.</li>
+            <li><b>v14:</b> Добавлена вкладка «Карта» (2GIS) + фикс чипов и чата.</li>
+            <li><b>v12–13:</b> Улучшения подсказок/карты, PWA, погода.</li>
           </ul>
         </div>
       </section>
@@ -126,8 +139,8 @@
       <section id="view-faq" class="view">
         <div class="panel reveal">
           <h2>FAQ</h2>
-          <details><summary>Нужен ли ключ для погоды?</summary><p>Нет, используется Open-Meteo (без ключей), с CORS.</p></details>
           <details><summary>Где хранится ключ GPT?</summary><p>На сервере Render в переменных окружения.</p></details>
+          <details><summary>Почему ключ 2GIS в HTML?</summary><p>Так подключается 2GIS JS SDK. Используйте демо/ограниченный ключ.</p></details>
         </div>
       </section>
 
@@ -141,7 +154,7 @@
     </main>
 
     <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v11</span>
+      Создатель: <strong>Madi</strong> • <span id="build">Build v14</span>
     </footer>
   </div>
 
@@ -162,6 +175,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=12"></script>
+  <script src="script.js?v=14"></script>
 </body>
 </html>
