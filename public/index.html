@@ -21,7 +21,7 @@
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
 
-  <link rel="stylesheet" href="style.css?v=9"/>
+  <link rel="stylesheet" href="style.css?v=11"/>
 </head>
 <body>
   <div class="app-shell">
@@ -80,10 +80,10 @@
         <div id="typing-indicator" class="typing-indicator" style="display:none">ROG-бот печатает<span class="dots">...</span></div>
 
         <div class="rog-input-area">
-          <input type="text" id="user-input" placeholder="Введите команду..."/>
+          <input type="text" id="user-input" placeholder="Введите команду..." autocomplete="off" />
           <div class="input-actions">
-            <button id="stop-btn" class="btn-ghost small" title="Остановить печать" disabled>STOP</button>
-            <button id="send-btn">Отправить</button>
+            <button id="stop-btn" class="btn-ghost small" type="button" title="Остановить печать" disabled>STOP</button>
+            <button id="send-btn" class="btn-primary" type="button">Отправить</button>
           </div>
         </div>
 
@@ -97,8 +97,8 @@
           <h2>Прогноз погоды</h2>
           <div class="weather-toolbar">
             <input id="weather-city" type="text" placeholder="Город (например, Алматы)" />
-            <button id="weather-search" class="btn btn-primary small">Найти</button>
-            <button id="weather-geo" class="btn btn-ghost small">Моё местоположение</button>
+            <button id="weather-search" class="btn btn-primary small" type="button">Найти</button>
+            <button id="weather-geo" class="btn btn-ghost small" type="button">Моё местоположение</button>
           </div>
 
           <div id="weather-status" class="weather-status"></div>
@@ -115,7 +115,8 @@
         <div class="panel reveal">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v4/9:</b> Раздел «Погода» (поиск/гео, текущая + 7 дней), без API-ключей.</li>
+            <li><b>v11:</b> Фикс кнопки «Отправить» (type=button + надёжные обработчики).</li>
+            <li><b>v9:</b> Раздел «Погода» (поиск/гео, 7 дней) без ключей.</li>
             <li>Полный редизайн, подсказки, поток ответа, PWA/SEO, бургер-меню.</li>
           </ul>
         </div>
@@ -140,7 +141,7 @@
     </main>
 
     <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v9</span>
+      Создатель: <strong>Madi</strong> • <span id="build">Build v11</span>
     </footer>
   </div>
 
@@ -149,8 +150,8 @@
   <div id="install-banner" class="install-banner" hidden>
     <span>Установить ROG ChatBot на устройство?</span>
     <div class="ib-actions">
-      <button id="ib-install" class="btn btn-primary small">Установить</button>
-      <button id="ib-close" class="btn btn-ghost small">Позже</button>
+      <button id="ib-install" class="btn btn-primary small" type="button">Установить</button>
+      <button id="ib-close" class="btn btn-ghost small" type="button">Позже</button>
     </div>
   </div>
 
@@ -161,6 +162,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=9"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

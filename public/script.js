@@ -1,8 +1,11 @@
-// ===== Tabs & Burger =====
+/* ===== Tabs & Burger ===== */
 function switchTab(tab){
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active', l.dataset.tab===tab));
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id===`view-${tab}`));
-  if(tab==='chat'){ document.getElementById('user-input')?.focus(); }
+  if(tab==='chat'){
+    bindChatHandlers();
+    document.getElementById('user-input')?.focus();
+  }
 }
 function initTabs(){
   document.querySelectorAll('[data-tab]').forEach(el=>{
@@ -33,7 +36,7 @@ function initTabs(){
   });
 }
 
-// ===== Scroll Progress =====
+/* ===== Scroll Progress ===== */
 const progressEl = document.getElementById('progress');
 function onScrollProgress(){
   const doc = document.documentElement;
@@ -44,7 +47,7 @@ function onScrollProgress(){
 }
 window.addEventListener('scroll', onScrollProgress, { passive:true });
 
-// ===== Parallax / Tilt / Reveal =====
+/* ===== Parallax / Tilt / Reveal ===== */
 function initParallax(){
   const layers = document.querySelectorAll('.parallax');
   document.addEventListener('mousemove', (e)=>{
@@ -75,10 +78,7 @@ function initReveal(){
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 }
 
-// ===== Chat elements =====
-const sendBtn    = document.getElementById("send-btn");
-const stopBtn    = document.getElementById("stop-btn");
-const inputEl    = document.getElementById("user-input");
+/* ===== Chat elements and helpers ===== */
 const chatWindow = document.getElementById("chat-window");
 const typingEl   = document.getElementById("typing-indicator");
 const sendSound  = document.getElementById("send-sound");
@@ -86,12 +86,34 @@ const btnDown    = document.getElementById('btn-to-bottom');
 const btnUp      = document.getElementById('btn-to-top');
 const toastEl    = document.getElementById('toast');
 
-// Quick prompts
-document.querySelectorAll('.chip').forEach(ch=>{
-  ch.addEventListener('click', ()=>{ inputEl.value = ch.dataset.prompt || ''; inputEl.focus(); });
-});
+function bindChatHandlers(){
+  const sendBtn  = document.getElementById('send-btn');
+  const stopBtn  = document.getElementById('stop-btn');
+  const inputEl  = document.getElementById('user-input');
+  const actions  = document.querySelector('#view-chat .input-actions');
 
-// ===== Scroll helpers for chat =====
+  if (sendBtn && !sendBtn.__bound) {
+    sendBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); sendMessage(); });
+    sendBtn.__bound = true;
+  }
+  if (inputEl && !inputEl.__bound) {
+    inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendMessage(); } });
+    inputEl.__bound = true;
+  }
+  if (stopBtn && !stopBtn.__bound) {
+    stopBtn.addEventListener('click', ()=>{ if(typingAbort){ typingAbort(); toast('Остановлено'); } });
+    stopBtn.__bound = true;
+  }
+  if (actions && !actions.__bound) {
+    actions.addEventListener('click', (e)=>{
+      const t = e.target;
+      if (t && (t.id==='send-btn' || t.closest('#send-btn'))) { e.preventDefault(); sendMessage(); }
+    });
+    actions.__bound = true;
+  }
+}
+
+/* scroll in chat */
 function isNearBottom(){
   const t=chatWindow.scrollTop, h=chatWindow.scrollHeight-chatWindow.clientHeight;
   return h - t < 60;
@@ -112,7 +134,7 @@ document.addEventListener('wheel', (e)=>{
   if(!chatWindow.matches(':hover')){ chatWindow.scrollTop += e.deltaY; e.preventDefault(); }
 }, { passive:false });
 
-// ===== Toast =====
+/* Toast */
 function toast(msg, ms=1800){
   if(!toastEl) return;
   toastEl.textContent = msg;
@@ -120,7 +142,7 @@ function toast(msg, ms=1800){
   setTimeout(()=> toastEl.classList.remove('show'), ms);
 }
 
-// ===== Messages + "streaming" (typewriter) =====
+/* Messages + "streaming" */
 let typingAbort = null;
 function addMessageEl(sender, text){
   const wrap = document.createElement('div');
@@ -153,6 +175,7 @@ function addUserMessage(text){
 }
 async function addBotStream(text){
   const wasNear = isNearBottom();
+  const stopBtn = document.getElementById('stop-btn');
   const el = addMessageEl("ROG-бот", "");
   wasNear ? scrollToBottom() : updateScrollButtons();
   stopBtn && (stopBtn.disabled = false);
@@ -161,20 +184,20 @@ async function addBotStream(text){
   return result;
 }
 
-// Send / Stop
-sendBtn?.addEventListener("click", sendMessage);
-inputEl?.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); });
-stopBtn?.addEventListener("click", ()=>{ if(typingAbort){ typingAbort(); toast('Остановлено'); } });
+/* Send */
 function sendMessage(){
-  const message = (inputEl.value || '').trim();
+  const inputEl = document.getElementById('user-input');
+  const message = (inputEl?.value || '').trim();
   if(!message) return;
   try{ sendSound?.play(); }catch(_){}
   addUserMessage(message);
   inputEl.value="";
   typingEl.style.display="block";
   chatWindow.setAttribute('aria-busy','true');
+
   fetch("/chat",{
-    method:"POST", headers:{ "Content-Type":"application/json" },
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({ message }),
   })
   .then(r=>r.json())
@@ -188,14 +211,15 @@ function sendMessage(){
   });
 }
 
-// ===== PWA Install (banner + header button) =====
+/* ===== PWA Install (banner + header button, iOS подсказка) ===== */
 let deferredPrompt = null;
 const ib = document.getElementById('install-banner');
 const ibInstall = document.getElementById('ib-install');
 const ibClose = document.getElementById('ib-close');
 const installBtn = document.getElementById('install-btn');
-function isiOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
-function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+const isiOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault(); deferredPrompt = e;
   ib && (ib.hidden = false); installBtn && (installBtn.hidden = false);
@@ -217,7 +241,7 @@ window.addEventListener('load', () => {
   if (isiOS() && ib) { const text = ib.querySelector('span'); if (text) text.textContent = 'На iPhone: Поделиться → На экран «Домой»'; ib.hidden = false; }
 });
 
-// ===== WEATHER (Open-Meteo, без ключей) =====
+/* ===== WEATHER (Open-Meteo) ===== */
 const cityInput = document.getElementById('weather-city');
 const searchBtn = document.getElementById('weather-search');
 const geoBtn    = document.getElementById('weather-geo');
@@ -246,8 +270,8 @@ const W_EMOJI = (c)=>(
   [71,73,75,77,85,86].includes(c)?'❄️':
   [95,96,99].includes(c)?'⛈️':'🌡️'
 );
+const setWeatherStatus = (t)=>{ if(wStatus) wStatus.textContent=t||''; };
 
-function setWeatherStatus(text){ if(wStatus){ wStatus.textContent=text||''; } }
 function renderCurrent(city, cur){
   const ico = W_EMOJI(cur.weather_code);
   const desc= W_DESC[cur.weather_code] || 'Погода';
@@ -274,7 +298,6 @@ function renderForecast(daily){
     </div>`;
   }).join('');
 }
-
 async function geocodeCity(name){
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=ru&format=json`;
   const r = await fetch(url); if(!r.ok) throw new Error('geocode');
@@ -288,7 +311,6 @@ async function fetchWeather(lat, lon){
   const r = await fetch(url); if(!r.ok) throw new Error('forecast');
   return r.json();
 }
-
 async function showWeatherByCity(name){
   try{
     setWeatherStatus('Поиск города…');
@@ -308,7 +330,7 @@ async function showWeatherByGeo(){
       const { latitude:lat, longitude:lon } = pos.coords;
       setWeatherStatus('Загружаю прогноз…');
       const data = await fetchWeather(lat, lon);
-      // обратное гео — возьмём ближайший населённый пункт
+      // обратное гео
       let label = 'Ваше местоположение';
       try{
         const r = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=ru&format=json`);
@@ -322,18 +344,16 @@ async function showWeatherByGeo(){
     }catch(_){ setWeatherStatus('Не удалось получить погоду'); toast('⚠️ Ошибка погоды'); }
   }, ()=>{ setWeatherStatus('Геолокация отклонена'); toast('Разрешите доступ к геолокации'); });
 }
-
-// события погоды
-searchBtn?.addEventListener('click', ()=>{
-  const q = (cityInput.value||'').trim(); if(!q) return;
-  showWeatherByCity(q);
+document.getElementById('weather-search')?.addEventListener('click', ()=>{
+  const q = (cityInput.value||'').trim(); if(q) showWeatherByCity(q);
 });
 cityInput?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const q=(cityInput.value||'').trim(); if(q) showWeatherByCity(q); }});
-geoBtn?.addEventListener('click', showWeatherByGeo);
+document.getElementById('weather-geo')?.addEventListener('click', showWeatherByGeo);
 
-// ===== Init =====
+/* ===== Init ===== */
 document.addEventListener('DOMContentLoaded', ()=>{
   initTabs();
+  bindChatHandlers();
   onScrollProgress();
   initParallax();
   initTilt();
