@@ -1,7 +1,7 @@
-const CACHE = 'rog-v10';
+const CACHE = 'rog-v12';
 const OFFLINE_URL = '/offline.html';
 const ASSETS = [
-  '/', '/index.html', '/style.css?v=14', '/script.js?v=15',
+  '/', '/index.html', '/style.css?v=14', '/script.js?v=17',
   '/manifest.webmanifest', OFFLINE_URL
 ];
 
