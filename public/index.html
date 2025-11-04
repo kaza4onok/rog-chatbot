@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
   <title>ROG ChatBot — AI в стиле ROG</title>
-  <meta name="description" content="Современный AI-чат в ROG-дизайне: чат + погода + карта 2GIS, PWA, эффекты."/>
+  <meta name="description" content="Современный AI-чат в ROG-дизайне: чат + погода, PWA, эффекты."/>
   <link rel="canonical" href="https://rog-chatbot.onrender.com/"/>
 
   <!-- SEO -->
   <meta property="og:title" content="ROG ChatBot — AI в стиле ROG"/>
-  <meta property="og:description" content="Чат, прогноз погоды, карта 2GIS, офлайн-страница, PWA."/>
+  <meta property="og:description" content="Чат, прогноз погоды, офлайн-страница, PWA."/>
 
   <!-- PWA -->
   <meta name="theme-color" content="#00ffe7"/>
@@ -18,10 +18,7 @@
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
 
-  <!-- 2GIS MapGL SDK -->
-  <script src="https://mapgl.2gis.com/api/js/v2"></script>
-
-  <link rel="stylesheet" href="style.css?v=14"/>
+  <link rel="stylesheet" href="style.css?v=18"/>
 </head>
 <body>
   <div class="app-shell">
@@ -31,7 +28,6 @@
         <a href="#home" class="nav-link active" data-tab="home">🏠 Главная</a>
         <a href="#chat" class="nav-link" data-tab="chat">💬 Чат</a>
         <a href="#weather" class="nav-link" data-tab="weather">⛅ Погода</a>
-        <a href="#map" class="nav-link" data-tab="map">🗺️ Карта</a>
         <a href="#news" class="nav-link" data-tab="news">📰 Новости</a>
         <a href="#faq" class="nav-link" data-tab="faq">❓ FAQ</a>
         <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
@@ -63,7 +59,7 @@
             <div class="feature-card tilt"><h3>⚡ Быстро</h3><p>Ответы через OpenRouter с локальным «стримом».</p></div>
             <div class="feature-card tilt"><h3>🎨 Стиль</h3><p>Glass + неон + микро-анимации, параллакс.</p></div>
             <div class="feature-card tilt"><h3>⛅ Погода</h3><p>7 дней без ключей (Open-Meteo).</p></div>
-            <div class="feature-card tilt"><h3>🗺️ Карта</h3><p>2GIS: геолокация, маркеры, копирование координат.</p></div>
+            <div class="feature-card tilt"><h3>📱 PWA</h3><p>Установка на телефон, офлайн-страница.</p></div>
           </div>
         </section>
       </section>
@@ -108,37 +104,24 @@
         </div>
       </section>
 
-      <!-- MAP -->
-      <section id="view-map" class="view">
-        <div class="panel map-wrap">
-          <h2>Карта 2GIS</h2>
-          <div class="map-toolbar">
-            <button id="map-geo" class="btn btn-primary small" type="button">Моё местоположение</button>
-            <button id="map-clear" class="btn btn-ghost small" type="button">Сбросить маркер</button>
-            <span id="map-coords" class="map-coords"></span>
-          </div>
-          <div id="map" class="dgis-map" role="region" aria-label="Интерактивная карта 2ГИС"></div>
-          <p class="map-hint">Клик по карте — поставить маркер. Клик по координатам — копировать в буфер.</p>
-        </div>
-      </section>
-
       <!-- NEWS -->
       <section id="view-news" class="view">
         <div class="panel reveal">
           <h2>Новости</h2>
           <ul class="news-list">
-            <li><b>v17:</b> Карта 2GIS — подключён личный MapGL-ключ, сбит кэш.</li>
+            <li><b>v18:</b> Удалена вкладка «Карта» (2GIS) и все зависимости.</li>
+            <li>Ранее: Погода (Open-Meteo), подсказки, PWA, поток ответа, бургер-меню.</li>
           </ul>
         </div>
       </section>
 
-      <!-- FAQ / SETTINGS опустаю ради краткости -->
+      <!-- FAQ / SETTINGS (кратко) -->
       <section id="view-faq" class="view"><div class="panel reveal"><h2>FAQ</h2></div></section>
       <section id="view-settings" class="view"><div class="panel reveal"><h2>Настройки</h2></div></section>
     </main>
 
     <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v17</span>
+      Создатель: <strong>Madi</strong> • <span id="build">Build v18</span>
     </footer>
   </div>
 
@@ -158,6 +141,6 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=17"></script>
+  <script src="script.js?v=18"></script>
 </body>
 </html>

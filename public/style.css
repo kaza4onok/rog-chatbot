@@ -3,7 +3,7 @@
 :root{
   --primary:#00ffe7; --accent:#a000ff;
   --bg0:#08090d; --bg1:#0f111a; --panel:#121524; --glass:rgba(255,255,255,.06);
-  --user:#ff0055; --bot:#00ffe7; --text:#dff; --muted:#9ab; --ok:#5dfbb3; --warn:#ffd86b;
+  --user:#ff0055; --bot:#00ffe7; --text:#dff; --muted:#9ab;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
@@ -123,19 +123,6 @@ body{
 .w-day .ico{font-size:1.4rem;margin-bottom:4px}
 .w-day .t{font-weight:700}
 
-/* Map */
-.map-wrap h2{margin-bottom:10px}
-.map-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.map-coords{color:#bff;opacity:.9}
-.dgis-map{
-  height:420px; width:100%;
-  border-radius:12px;
-  border:1px solid rgba(0,255,231,.25);
-  box-shadow:inset 0 0 10px rgba(0,255,231,.12);
-  overflow:hidden; background:#0f111a;
-}
-.map-hint{margin-top:8px;color:#9ab;font-size:.9em}
-
 /* Footer & anim */
 .site-footer{padding:10px;text-align:center;font-size:.9em;color:var(--muted);background:#0d0f15;border-top:1px solid rgba(255,255,255,.05)}
 .reveal{opacity:0;transform:translateY(18px);transition:.5s}
@@ -161,5 +148,4 @@ body{
   .scroll-fab{right:10px;width:40px;height:40px}
   .scroll-fab.to-bottom{bottom:96px}.scroll-fab.to-top{bottom:144px}
   .weather-forecast{grid-template-columns:repeat(2,1fr)}
-  .dgis-map{height:360px}
 }
