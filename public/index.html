@@ -3,144 +3,178 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ROG ChatBot — NeoStack UI</title>
+  <meta name="description" content="Инновационный AI-чат в неон-стиле: стек-интерфейс, PWA, офлайн, погода."/>
+  <meta name="theme-color" content="#00f0ff"/>
 
-  <title>ROG ChatBot — AI в стиле ROG</title>
-  <meta name="description" content="Современный AI-чат в ROG-дизайне: чат + погода, PWA, эффекты."/>
-  <link rel="canonical" href="https://rog-chatbot.onrender.com/"/>
-
-  <!-- SEO -->
-  <meta property="og:title" content="ROG ChatBot — AI в стиле ROG"/>
-  <meta property="og:description" content="Чат, прогноз погоды, офлайн-страница, PWA."/>
-
-  <!-- PWA -->
-  <meta name="theme-color" content="#00ffe7"/>
   <link rel="manifest" href="manifest.webmanifest"/>
   <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='100%25' height='100%25' fill='%2300ffe7'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='120' font-family='Arial' fill='%23000'%3ER%3C/text%3E%3C/svg%3E"/>
+  <link rel="icon" href="/icons/manifest-icon-192.maskable.png" sizes="192x192" type="image/png">
 
-  <link rel="stylesheet" href="style.css?v=18"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- v22 -->
+  <link rel="stylesheet" href="style.css?v=22"/>
 </head>
-<body>
-  <div class="app-shell">
-    <header class="site-header">
-      <div class="brand">ROG ChatBot</div>
-      <nav class="main-nav">
-        <a href="#home" class="nav-link active" data-tab="home">🏠 Главная</a>
-        <a href="#chat" class="nav-link" data-tab="chat">💬 Чат</a>
-        <a href="#weather" class="nav-link" data-tab="weather">⛅ Погода</a>
-        <a href="#news" class="nav-link" data-tab="news">📰 Новости</a>
-        <a href="#faq" class="nav-link" data-tab="faq">❓ FAQ</a>
-        <a href="#settings" class="nav-link" data-tab="settings">⚙️ Настройки</a>
-      </nav>
-      <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">☰</button>
-      <button id="install-btn" class="btn btn-ghost small install-btn" hidden>Установить</button>
-    </header>
-    <div class="progress-bar"><span id="progress"></span></div>
+<body data-theme="neo">
+  <!-- Animated background layers -->
+  <div class="bg bg--mesh" aria-hidden="true"></div>
+  <div class="bg bg--grid" aria-hidden="true"></div>
+  <div class="bg bg--beams" aria-hidden="true"></div>
 
-    <main class="views">
-      <!-- HOME -->
-      <section id="view-home" class="view active">
-        <section class="hero">
-          <div class="hero__bg parallax" data-depth="0.2"></div>
-          <div class="hero__grid parallax" data-depth="0.4"></div>
-          <div class="hero__content reveal">
-            <h1>AI в духе <span>ROG</span></h1>
-            <p>Неоновая эстетика, скорость и удобство. Запусти чат — почувствуй мощь.</p>
-            <div class="hero__cta">
-              <a href="#chat" class="btn btn-primary" data-tab="chat">Начать чат</a>
-              <a href="#news" class="btn btn-ghost" data-tab="news">Что нового?</a>
-            </div>
-          </div>
-        </section>
+  <!-- Glass AppBar -->
+  <header class="appbar">
+    <div class="brand">
+      <div class="logo">R</div>
+      <div class="brand-text">
+        <div class="title">ROG ChatBot</div>
+        <div class="sub">NeoStack • v22</div>
+      </div>
+    </div>
+    <nav class="topnav" aria-label="Навигация">
+      <a href="#home" class="nav-link active" data-tab="home">Главная</a>
+      <a href="#chat" class="nav-link" data-tab="chat">Чат</a>
+      <a href="#weather" class="nav-link" data-tab="weather">Погода</a>
+      <a href="#news" class="nav-link" data-tab="news">Новости</a>
+      <a href="#settings" class="nav-link" data-tab="settings">Настройки</a>
+    </nav>
+    <div class="appbar-actions">
+      <button id="install-btn" class="btn ghost small" hidden>Установить</button>
+      <button id="burger" class="btn ghost small only-mobile" aria-label="Меню" aria-expanded="false">☰</button>
+    </div>
+  </header>
 
-        <section class="features panel reveal">
-          <h2>Почему это цепляет</h2>
-          <div class="features__list">
-            <div class="feature-card tilt"><h3>⚡ Быстро</h3><p>Ответы через OpenRouter с локальным «стримом».</p></div>
-            <div class="feature-card tilt"><h3>🎨 Стиль</h3><p>Glass + неон + микро-анимации, параллакс.</p></div>
-            <div class="feature-card tilt"><h3>⛅ Погода</h3><p>7 дней без ключей (Open-Meteo).</p></div>
-            <div class="feature-card tilt"><h3>📱 PWA</h3><p>Установка на телефон, офлайн-страница.</p></div>
-          </div>
-        </section>
-      </section>
+  <!-- Vertical neon dock -->
+  <aside class="dock">
+    <button class="dock-btn active" data-tab="home" title="Главная">🏠</button>
+    <button class="dock-btn" data-tab="chat" title="Чат">💬</button>
+    <button class="dock-btn" data-tab="weather" title="Погода">⛅</button>
+    <button class="dock-btn" data-tab="news" title="Новости">📰</button>
+    <button class="dock-btn" data-tab="settings" title="Настройки">⚙️</button>
+  </aside>
 
-      <!-- CHAT -->
-      <section id="view-chat" class="view">
-        <div class="quick-prompts reveal">
-          <button class="chip" data-prompt="Придумай крутую идею сайта в стиле ROG.">Идея сайта</button>
-          <button class="chip" data-prompt="Сделай план развития проекта на 2 месяца.">План развития</button>
-          <button class="chip" data-prompt="Как улучшить UX на мобильных?">UX мобилки</button>
-          <button class="chip" data-prompt="Напиши короткий промо-текст для главной.">Промо-текст</button>
-        </div>
-
-        <div id="chat-window" class="chat-window" aria-live="polite" aria-busy="false"></div>
-        <div id="typing-indicator" class="typing-indicator" style="display:none">ROG-бот печатает<span class="dots">...</span></div>
-
-        <div class="rog-input-area">
-          <input type="text" id="user-input" placeholder="Введите команду..." autocomplete="off" />
-          <div class="input-actions">
-            <button id="stop-btn" class="btn-ghost small" type="button" title="Остановить печать" disabled>STOP</button>
-            <button id="send-btn" class="btn-primary" type="button">Отправить</button>
+  <!-- Main stack -->
+  <main class="stack">
+    <!-- HOME -->
+    <section id="view-home" class="card view active" tabindex="-1">
+      <div class="hero">
+        <div class="hero__content">
+          <h1><span>Neo</span> интерфейс для AI</h1>
+          <p>Сверхчёткая типографика, стек-слои, неон-док и микродвиж. Начни общение за секунду.</p>
+          <div class="hero__actions">
+            <a href="#chat" class="btn primary" data-tab="chat">Начать чат</a>
+            <a href="#news" class="btn ghost" data-tab="news">Что нового</a>
           </div>
         </div>
+      </div>
 
-        <button class="scroll-fab to-bottom" id="btn-to-bottom" title="Вниз">⬇️</button>
-        <button class="scroll-fab to-top" id="btn-to-top" title="Вверх">⬆️</button>
-      </section>
-
-      <!-- WEATHER -->
-      <section id="view-weather" class="view">
-        <div class="panel weather-wrap">
-          <h2>Прогноз погоды</h2>
-          <div class="weather-toolbar">
-            <input id="weather-city" type="text" placeholder="Город (например, Алматы)" />
-            <button id="weather-search" class="btn btn-primary small" type="button">Найти</button>
-            <button id="weather-geo" class="btn btn-ghost small" type="button">Моё местоположение</button>
-          </div>
-          <div id="weather-status" class="weather-status"></div>
-          <div id="weather-current" class="weather-current"></div>
-          <div id="weather-forecast" class="weather-forecast"></div>
-          <div class="weather-source">Источник: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></div>
+      <div class="features">
+        <div class="feature tilt">
+          <h3>⚡ Быстрее</h3>
+          <p>Стрим ответа + минимальный DOM, оптимизированные эффекты.</p>
         </div>
-      </section>
-
-      <!-- NEWS -->
-      <section id="view-news" class="view">
-        <div class="panel reveal">
-          <h2>Новости</h2>
-          <ul class="news-list">
-            <li><b>v18:</b> Удалена вкладка «Карта» (2GIS) и все зависимости.</li>
-            <li>Ранее: Погода (Open-Meteo), подсказки, PWA, поток ответа, бургер-меню.</li>
-          </ul>
+        <div class="feature tilt">
+          <h3>🎨 Чище</h3>
+          <p>Glass/Neon, аккуратные тени, читаемость и контраст.</p>
         </div>
-      </section>
+        <div class="feature tilt">
+          <h3>📱 Удобно</h3>
+          <p>PWA, офлайн-страница, свайпы и компактные элементы.</p>
+        </div>
+      </div>
+    </section>
 
-      <!-- FAQ / SETTINGS (кратко) -->
-      <section id="view-faq" class="view"><div class="panel reveal"><h2>FAQ</h2></div></section>
-      <section id="view-settings" class="view"><div class="panel reveal"><h2>Настройки</h2></div></section>
-    </main>
+    <!-- CHAT -->
+    <section id="view-chat" class="card view" tabindex="-1">
+      <h2>Чат</h2>
 
-    <footer class="site-footer">
-      Создатель: <strong>Madi</strong> • <span id="build">Build v18</span>
+      <div class="chips">
+        <button class="chip" data-prompt="Придумай крутую идею сайта в стиле ROG.">Идея сайта</button>
+        <button class="chip" data-prompt="Сделай план развития проекта на 2 месяца.">План развития</button>
+        <button class="chip" data-prompt="Как улучшить UX на мобильных?">UX мобилки</button>
+        <button class="chip" data-prompt="Напиши короткий промо-текст для главной.">Промо-текст</button>
+      </div>
+
+      <div id="chat-window" class="chat" aria-live="polite" aria-busy="false"></div>
+      <div id="typing-indicator" class="typing" style="display:none">ROG-бот печатает<span class="dots"></span></div>
+
+      <div class="composer">
+        <input id="user-input" type="text" placeholder="Напишите сообщение…" autocomplete="off"/>
+        <div class="actions">
+          <button id="stop-btn" class="btn ghost small" disabled>STOP</button>
+          <button id="send-btn" class="btn primary">Отправить</button>
+        </div>
+      </div>
+
+      <button class="fab to-bottom" id="btn-to-bottom" title="Вниз">⬇️</button>
+      <button class="fab to-top" id="btn-to-top" title="Вверх">⬆️</button>
+    </section>
+
+    <!-- WEATHER -->
+    <section id="view-weather" class="card view" tabindex="-1">
+      <h2>Погода</h2>
+      <div class="toolbar">
+        <input id="weather-city" type="text" placeholder="Город (например, Алматы)"/>
+        <button id="weather-search" class="btn primary small">Найти</button>
+        <button id="weather-geo" class="btn ghost small">Моё местоположение</button>
+      </div>
+      <div id="weather-status" class="muted"></div>
+      <div class="weather">
+        <div id="weather-current" class="current"></div>
+        <div id="weather-forecast" class="forecast"></div>
+      </div>
+      <div class="source">Источник: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></div>
+    </section>
+
+    <!-- NEWS -->
+    <section id="view-news" class="card view" tabindex="-1">
+      <h2>Новости</h2>
+      <ul class="news">
+        <li><b>v22:</b> Полный NeoStack-редизайн: glass-аппбар, неон-док, фон-лучи, карточки.</li>
+        <li>v21: sidebar-версия.</li>
+        <li>Ранее: PWA, погода, потоковая печать, типографика.</li>
+      </ul>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="card view" tabindex="-1">
+      <h2>Настройки</h2>
+      <form id="settings-form" class="settings">
+        <label><span>Тема</span>
+          <select id="set-theme">
+            <option value="neo">Neo</option>
+            <option value="cyber">Cyber</option>
+            <option value="ember">Ember</option>
+            <option value="mono">Mono</option>
+          </select>
+        </label>
+        <label><span>Анимации</span>
+          <select id="set-motion">
+            <option value="full">Полные</option>
+            <option value="reduced">Меньше</option>
+          </select>
+        </label>
+        <label class="row"><span>Звук отправки</span><input type="checkbox" id="set-sound" checked/></label>
+        <label class="row"><span>Компактные сообщения</span><input type="checkbox" id="set-compact"/></label>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <span>Создатель: <b>Madi</b></span> • <span id="build">Build v22</span>
     </footer>
-  </div>
+  </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <div id="install-banner" class="install-banner" hidden>
-    <span>Установить ROG ChatBot на устройство?</span>
-    <div class="ib-actions">
-      <button id="ib-install" class="btn btn-primary small" type="button">Установить</button>
-      <button id="ib-close" class="btn btn-ghost small" type="button">Позже</button>
-    </div>
-  </div>
-
-  <audio id="send-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.wav"></audio>
+  <audio id="send-sound" preload="auto" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.wav"></audio>
 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <script src="script.js?v=18"></script>
+  <!-- v22 -->
+  <script src="script.js?v=22" defer></script>
 </body>
 </html>

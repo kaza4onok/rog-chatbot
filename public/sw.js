@@ -1,7 +1,7 @@
-const CACHE = 'rog-v13';
+const CACHE = 'rog-v17';
 const OFFLINE_URL = '/offline.html';
 const ASSETS = [
-  '/', '/index.html', '/style.css?v=18', '/script.js?v=18',
+  '/', '/index.html', '/style.css?v=22', '/script.js?v=22',
   '/manifest.webmanifest', OFFLINE_URL
 ];
 
@@ -10,20 +10,17 @@ self.addEventListener('install', e=>{
   self.skipWaiting();
 });
 self.addEventListener('activate', e=>{
-  e.waitUntil(
-    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))
-  );
+  e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
   self.clients.claim();
 });
 self.addEventListener('fetch', e=>{
   const req=e.request; const url=new URL(req.url);
   if(req.method!=='GET' || url.pathname.startsWith('/chat')) return;
-
   if(req.mode==='navigate'){ e.respondWith(fetch(req).catch(()=>caches.match(OFFLINE_URL))); return; }
-
-  e.respondWith(
-    caches.match(req).then(cached => cached || fetch(req).then(resp=>{
-      const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(req, copy)); return resp;
-    }).catch(()=>cached))
-  );
+  e.respondWith((async ()=>{
+    const cache=await caches.open(CACHE);
+    const cached=await cache.match(req);
+    const fetched=fetch(req).then(r=>{ cache.put(req, r.clone()); return r; }).catch(()=>cached);
+    return cached || fetched;
+  })());
 });
