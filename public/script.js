@@ -1,4 +1,4 @@
-console.log('ROG front v24 loaded');
+console.log('ROG front v24.1 loaded');
 
 /* =================== NAV (topnav + dock) =================== */
 function switchTab(tab){
@@ -197,7 +197,28 @@ function sendMessage(){
     })
     .catch(()=>{ setBusy(false); bubble('assistant','⚠️ Ошибка получения ответа.'); });
 }
-document.getElementById('stop-btn')?.addEventListener('click', ()=>{ if(typingAbort){ typingAbort(); toast('Остановлено'); setBusy(false); }});
+
+/* === ВАЖНО: привязка кнопки «Отправить», Enter и STOP === */
+function bindChatHandlers(){
+  const sendBtn=document.getElementById('send-btn');
+  const stopBtn=document.getElementById('stop-btn');
+  const ta=document.getElementById('user-input');
+
+  if(sendBtn && !sendBtn.__bound){
+    sendBtn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); sendMessage(); });
+    sendBtn.__bound=true;
+  }
+  if(ta && !ta.__bound){
+    ta.addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+    });
+    ta.__bound=true;
+  }
+  if(stopBtn && !stopBtn.__bound){
+    stopBtn.addEventListener('click', ()=>{ if(typingAbort){ typingAbort(); toast('Остановлено'); setBusy(false); }});
+    stopBtn.__bound=true;
+  }
+}
 
 /* =================== TTS (voices ru) =================== */
 let voices=[];
