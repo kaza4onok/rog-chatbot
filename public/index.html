@@ -15,22 +15,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- v22 -->
-  <link rel="stylesheet" href="style.css?v=22"/>
+  <!-- v24 -->
+  <link rel="stylesheet" href="style.css?v=24"/>
 </head>
 <body data-theme="neo">
-  <!-- Animated background layers -->
+  <!-- Фоновые слои -->
   <div class="bg bg--mesh" aria-hidden="true"></div>
   <div class="bg bg--grid" aria-hidden="true"></div>
   <div class="bg bg--beams" aria-hidden="true"></div>
 
-  <!-- Glass AppBar -->
+  <!-- AppBar -->
   <header class="appbar">
     <div class="brand">
       <div class="logo">R</div>
       <div class="brand-text">
         <div class="title">ROG ChatBot</div>
-        <div class="sub">NeoStack • v22</div>
+        <div class="sub">NeoStack • v24</div>
       </div>
     </div>
     <nav class="topnav" aria-label="Навигация">
@@ -46,7 +46,7 @@
     </div>
   </header>
 
-  <!-- Vertical neon dock -->
+  <!-- Боковой док -->
   <aside class="dock">
     <button class="dock-btn active" data-tab="home" title="Главная">🏠</button>
     <button class="dock-btn" data-tab="chat" title="Чат">💬</button>
@@ -55,7 +55,7 @@
     <button class="dock-btn" data-tab="settings" title="Настройки">⚙️</button>
   </aside>
 
-  <!-- Main stack -->
+  <!-- Контент-стек -->
   <main class="stack">
     <!-- HOME -->
     <section id="view-home" class="card view active" tabindex="-1">
@@ -71,18 +71,9 @@
       </div>
 
       <div class="features">
-        <div class="feature tilt">
-          <h3>⚡ Быстрее</h3>
-          <p>Стрим ответа + минимальный DOM, оптимизированные эффекты.</p>
-        </div>
-        <div class="feature tilt">
-          <h3>🎨 Чище</h3>
-          <p>Glass/Neon, аккуратные тени, читаемость и контраст.</p>
-        </div>
-        <div class="feature tilt">
-          <h3>📱 Удобно</h3>
-          <p>PWA, офлайн-страница, свайпы и компактные элементы.</p>
-        </div>
+        <div class="feature tilt"><h3>⚡ Быстрее</h3><p>Стрим ответа + минимальный DOM, оптимизированные эффекты.</p></div>
+        <div class="feature tilt"><h3>🎨 Чище</h3><p>Glass/Neon, аккуратные тени, читаемость и контраст.</p></div>
+        <div class="feature tilt"><h3>📱 Удобно</h3><p>PWA, офлайн-страница, жесты и компактные элементы.</p></div>
       </div>
     </section>
 
@@ -90,19 +81,22 @@
     <section id="view-chat" class="card view" tabindex="-1">
       <h2>Чат</h2>
 
-      <div class="chips">
-        <button class="chip" data-prompt="Придумай крутую идею сайта в стиле ROG.">Идея сайта</button>
-        <button class="chip" data-prompt="Сделай план развития проекта на 2 месяца.">План развития</button>
-        <button class="chip" data-prompt="Как улучшить UX на мобильных?">UX мобилки</button>
-        <button class="chip" data-prompt="Напиши короткий промо-текст для главной.">Промо-текст</button>
+      <div class="chat-toolbar">
+        <button id="new-chat" class="btn ghost small" title="Новый диалог">Новый</button>
+        <select id="history-select" class="history"></select>
+        <div class="spacer"></div>
+        <button id="export-chat" class="btn ghost small" title="Экспорт диалога">Экспорт</button>
+        <button id="clear-chat" class="btn ghost small" title="Очистить текущий диалог">Очистить</button>
       </div>
 
       <div id="chat-window" class="chat" aria-live="polite" aria-busy="false"></div>
       <div id="typing-indicator" class="typing" style="display:none">ROG-бот печатает<span class="dots"></span></div>
 
       <div class="composer">
-        <input id="user-input" type="text" placeholder="Напишите сообщение…" autocomplete="off"/>
+        <button id="mic-btn" class="icon-btn" title="Голосовой ввод">🎙️</button>
+        <textarea id="user-input" rows="1" placeholder="Напишите сообщение… (Enter — отправить, Shift+Enter — новая строка)"></textarea>
         <div class="actions">
+          <div id="req-spinner" class="spinner" hidden></div>
           <button id="stop-btn" class="btn ghost small" disabled>STOP</button>
           <button id="send-btn" class="btn primary">Отправить</button>
         </div>
@@ -132,9 +126,9 @@
     <section id="view-news" class="card view" tabindex="-1">
       <h2>Новости</h2>
       <ul class="news">
-        <li><b>v22:</b> Полный NeoStack-редизайн: glass-аппбар, неон-док, фон-лучи, карточки.</li>
-        <li>v21: sidebar-версия.</li>
-        <li>Ранее: PWA, погода, потоковая печать, типографика.</li>
+        <li><b>v24:</b> Полный чистый комплект фронта (история, голос, меню, офлайн, PWA).</li>
+        <li>v23.x: История чатов, TTS/микрофон, textarea/индикатор/очистка.</li>
+        <li>v22: NeoStack-редизайн.</li>
       </ul>
     </section>
 
@@ -162,7 +156,7 @@
     </section>
 
     <footer class="foot">
-      <span>Создатель: <b>Madi</b></span> • <span id="build">Build v22</span>
+      <span>Создатель: <b>Madi</b></span> • <span id="build">Build v24</span>
     </footer>
   </main>
 
@@ -174,7 +168,7 @@
       window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
   </script>
-  <!-- v22 -->
-  <script src="script.js?v=22" defer></script>
+  <!-- v24 -->
+  <script src="script.js?v=24" defer></script>
 </body>
 </html>
